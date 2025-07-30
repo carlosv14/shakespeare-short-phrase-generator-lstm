@@ -1,6 +1,5 @@
 from data import *
 from model import *
-from predict import generate
 import argparse
 
 argparser = argparse.ArgumentParser()
@@ -50,7 +49,6 @@ for epoch in range(1, n_epochs + 1):
     loss = train(input_tensor, target_tensor)
     if epoch % print_every == 0:
         print('[(Training progress: %d%%) loss = %.4f]' % ( epoch / n_epochs * 100, loss))
-        print(generate('The'), '\n')
 
 
 torch.save(decoder, 'short-phrase-generation.pt')

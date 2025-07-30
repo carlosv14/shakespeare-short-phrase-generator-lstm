@@ -38,6 +38,7 @@ Dependencies:
 - Flask
 - PyTorch
 - Unidecode
+- Numpy
 
 ## Usage
 
@@ -92,3 +93,61 @@ This project is for educational purposes and does not include a specific license
 
 - [PyTorch](https://pytorch.org/) for the deep learning framework.
 - Shakespeare's works for the dataset.
+
+## Running the Project with Docker
+
+You can run this project using Docker to simplify the setup process. Follow the steps below:
+
+### Build the Docker Image
+
+First, build the Docker image:
+
+```bash
+docker build -t short-phrase-generator .
+```
+
+### Run the Docker Container
+
+Run the container and map the application to a port on your host machine (e.g., port 5000):
+
+```bash
+docker run -p 5000:5000 short-phrase-generator
+```
+
+### What Happens During Startup?
+
+1. **Model Check**:  
+   When the container starts, the `entrypoint.sh` script checks if the `short-phrase-generation.pt` file (the trained model) exists in the container.
+   
+2. **If the Model File Exists**:  
+   - The script skips the training process and directly starts the Flask application.
+
+3. **If the Model File Does Not Exist**:  
+   - The script automatically trains the model using the `train.py` script with the default dataset (`data/shakespeare.txt`).
+   - Once training is complete, the Flask application is started.
+
+### Access the Application
+
+After running the container, you can access the application in your browser at:
+
+```
+http://localhost:5000
+```
+
+### Example Output
+
+- If the model file exists:
+  ```
+  Model file found. Skipping training.
+  * Running on http://0.0.0.0:5000 (Press CTRL+C to quit)
+  ```
+
+- If the model file does not exist:
+  ```
+  Model file not found. Training the model...
+  Training complete. Starting the application...
+  * Running on http://0.0.0.0:5000 (Press CTRL+C to quit)
+  ```
+
+This setup ensures that the model is trained only when necessary, making it easy to deploy and run the application in any environment.
+

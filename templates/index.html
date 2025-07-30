@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Text Generator</title>
@@ -71,31 +72,30 @@
     }
   </style>
 </head>
+
 <body>
   <div class="container">
-    <h1>Character-Level Shakespear Text Generator</h1>
+    <h1>Character-Level Shakespeare Text Generator</h1>
     <form method="POST">
       <label for="prompt">Prompt:</label>
-      <input type="text" name="prompt" required>
+      <input type="text" name="prompt" value="" required>
 
       <label for="temperature">Temperature:</label>
-      <input type="text" name="temperature" value="0.8" required>
+      <input type="text" name="temperature" value="{{ request.form.temperature or 0.8 }}" required>
 
       <label for="top_k">Top K:</label>
-      <input type="text" name="top_k" value="5" required>
+      <input type="text" name="top_k" value="{{ request.form.top_k or 5 }}" required>
 
       <label for="max_words">Max Words:</label>
-      <input type="text" name="max_words" value="3" required>
+      <input type="text" name="max_words" value="{{ request.form.max_words or 10 }}" required>
 
       <input type="submit" value="Generate">
-    </form>
-
-    {% if result %}
+      {% if result %}
       <div class="result">
         <h2>Generated Text:</h2>
         <p>{{ result }}</p>
+        {% endif %}
       </div>
-    {% endif %}
-  </div>
 </body>
+
 </html>

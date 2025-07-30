@@ -2,7 +2,7 @@ from data import *
 import sys
 import argparse
 
-decoder = torch.load('short-phrase-generation.pt')
+decoder = torch.load('short-phrase-generation.pt', weights_only=False)
 
 def generate(starting_string='A', max_words=3, temperature=0.8, top_k=5):
     hidden = decoder.init_hidden()
