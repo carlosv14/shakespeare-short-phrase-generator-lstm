@@ -66,7 +66,7 @@ Start the Flask web application by running:
 python app.py
 ```
 
-The application will be accessible at `http://127.0.0.1:5000`.
+The application will be accessible at `http://127.0.0.1:3505`.
 
 ### Generating Text
 
@@ -107,10 +107,10 @@ docker build -t short-phrase-generator .
 
 ### Run the Docker Container
 
-Run the container and map the application to a port on your host machine (e.g., port 5000):
+Run the container and map the application to a port on your host machine (e.g., port 3505):
 
 ```bash
-docker run -p 5000:5000 short-phrase-generator
+docker run -p 5000:3505 short-phrase-generator
 ```
 
 ### What Happens During Startup?
@@ -130,7 +130,7 @@ docker run -p 5000:5000 short-phrase-generator
 After running the container, you can access the application in your browser at:
 
 ```
-http://localhost:5000
+http://localhost:3505
 ```
 
 ### Example Output
@@ -145,7 +145,7 @@ http://localhost:5000
   ```
   Model file not found. Training the model...
   Training complete. Starting the application...
-  * Running on http://0.0.0.0:5000 (Press CTRL+C to quit)
+  * Running on http://0.0.0.0:3505 (Press CTRL+C to quit)
   ```
 
 This setup ensures that the model is trained only when necessary, making it easy to deploy and run the application in any environment.

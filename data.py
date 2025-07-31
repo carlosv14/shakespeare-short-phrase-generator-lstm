@@ -8,7 +8,7 @@ all_characters = string.printable
 
 def read_data(filePath):
     text = unidecode.unidecode(open(filePath).read())
-    text = ''.join(c for c in text if c in string.printable and c not in '\n\r\t')
+    text = text.replace('\n', ' ').replace('\r', ' ').replace('\t', ' ')
     return text
 
 def random_training_example(file, subset_length=100):
