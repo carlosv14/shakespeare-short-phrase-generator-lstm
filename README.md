@@ -23,7 +23,6 @@ This project is a character-level text generator trained on Shakespeare's works.
 │   └── shakespeare.txt  # Training data (Shakespeare's works)
 ├── templates/
 │   └── index.html       # HTML template for the web interface
-└── __pycache__/         # Compiled Python files (ignored by Git)
 ```
 
 ## Requirements
