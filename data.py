@@ -12,7 +12,7 @@ def read_data(filePath):
     return text
 
 def random_training_example(file, subset_length=100):
-    start_index = random.randint(0, len(file) - subset_length)
+    start_index = random.randint(0, len(file) - subset_length - 1)
     end_index = start_index + subset_length + 1
     return file[start_index : end_index]
 
@@ -32,3 +32,19 @@ def random_training_set(file, subset_length=100):
     input_tensor = text_to_tensor(example[:-1])
     target_tensor = text_to_tensor(example[1:])
     return input_tensor, target_tensor
+
+def create_minibatch(file, batch_size=32, subset_length=100):
+    batch_inputs = []
+    batch_targets = []
+    
+    for _ in range(batch_size):
+        example = random_training_example(file, subset_length)
+        input_tensor = text_to_tensor(example[:-1])
+        target_tensor = text_to_tensor(example[1:])
+        batch_inputs.append(input_tensor)
+        batch_targets.append(target_tensor)
+    
+    batch_input = torch.stack(batch_inputs)
+    batch_target = torch.stack(batch_targets)
+    
+    return batch_input, batch_target

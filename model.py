@@ -9,13 +9,14 @@ class RNN(nn.Module):
         self.hidden_size = hidden_size
         self.output_size = output_size
         self.n_layers = n_layers
-        self.lstm = nn.LSTM(input_size, hidden_size, n_layers)
+        self.lstm = nn.LSTM(input_size, hidden_size, n_layers, batch_first=True)
         self.decoder = nn.Linear(hidden_size, output_size)
     
     def forward(self, input, hidden):
-        output, hidden = self.lstm(input.view(1, 1, -1), hidden)
-        output = self.decoder(output.view(1, -1))
+        output, hidden = self.lstm(input, hidden)
+        output = self.decoder(output)
         return output, hidden
 
-    def init_hidden(self):
-        return (torch.zeros(self.n_layers, 1, self.hidden_size), torch.zeros(self.n_layers, 1, self.hidden_size))
+    def init_hidden(self, batch_size=1):
+        return (torch.zeros(self.n_layers, batch_size, self.hidden_size), 
+                torch.zeros(self.n_layers, batch_size, self.hidden_size))
