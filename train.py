@@ -1,5 +1,6 @@
 from data import *
 from model import *
+from device_utils import get_device, print_device_info
 import argparse
 
 argparser = argparse.ArgumentParser()
@@ -13,6 +14,9 @@ argparser.add_argument('--example-length', type=int, default=200, help='Length o
 argparser.add_argument('--batch-size', type=int, default=32, help='Batch size for minibatch training')
 args = argparser.parse_args()
 
+device = get_device()
+print_device_info()
+
 n_epochs = args.n_epochs
 print_every = args.print_every
 hidden_size = args.hidden_size
@@ -22,7 +26,7 @@ example_length = args.example_length
 batch_size = args.batch_size
 n_characters = len(all_characters)
 
-decoder = RNN(n_characters, hidden_size, n_characters, n_layers)
+decoder = RNN(n_characters, hidden_size, n_characters, n_layers, device=device)
 decoder_optimizer = torch.optim.Adam(decoder.parameters(), lr=lr)
 criterion = nn.CrossEntropyLoss()
 
@@ -30,10 +34,12 @@ file = read_data(args.filename)
 
 
 def train(input_batch, target_batch):
+    input_batch = input_batch.to(device)
+    target_batch = target_batch.to(device)
+    
     hidden = decoder.init_hidden(batch_size)
     decoder.zero_grad()
     loss = 0
-
     target_indices = torch.argmax(target_batch, dim=2)
     
     output, hidden = decoder(input_batch, hidden)
@@ -41,7 +47,6 @@ def train(input_batch, target_batch):
     output_reshaped = output.view(-1, output.size(-1))
     target_reshaped = target_indices.view(-1)
     
-    # Calculate loss
     loss = criterion(output_reshaped, target_reshaped)
     
     loss.backward()
@@ -51,6 +56,13 @@ def train(input_batch, target_batch):
 
 
 try:
+    print(f"Starting training on {device}...")
+    print(f"Batch size: {batch_size}")
+    print(f"Sequence length: {example_length}")
+    print(f"Hidden size: {hidden_size}")
+    print(f"Number of layers: {n_layers}")
+    print()
+    
     for epoch in range(1, n_epochs + 1):
         input_batch, target_batch = create_minibatch(file, batch_size=batch_size, subset_length=example_length)
         loss = train(input_batch, target_batch)
@@ -59,5 +71,8 @@ try:
 
     torch.save(decoder, 'short-phrase-generation.pt')
     print("Training completed successfully!")
+    print(f"Model saved to: short-phrase-generation.pt")
 except Exception as e:
     print(f"Training failed with error: {str(e)}")
+    import traceback
+    traceback.print_exc()
